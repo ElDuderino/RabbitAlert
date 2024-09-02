@@ -1,0 +1,23 @@
+rabbitmq:
+  host: "localhost"
+  port: 5672
+  username: "guest"
+  password: "guest"
+
+queues:
+  - name: "queue1"
+    size_threshold: 100
+    inbound_rate_threshold: 10
+    outbound_rate_threshold: 5
+    messaging_limits:
+      max_messages_per_period: 5
+      period_length_hours: 1
+      min_time_between_messages_minutes: 10
+  - name: "queue2"
+    size_threshold: 50
+    inbound_rate_threshold: 8
+    outbound_rate_threshold: 3
+    messaging_limits:
+      max_messages_per_period: 3
+      period_length_hours: 2
+      min_time_between_messages_minutes: 15
