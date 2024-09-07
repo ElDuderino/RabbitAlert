@@ -21,6 +21,7 @@ class QueueMonitor:
         self.previous_inbound_count = 0
         self.previous_outbound_count = 0
         self.previous_check_time = datetime.now()
+        self.run_count = 0
 
     def check_thresholds(self):
         # Fetch queue metrics
@@ -39,13 +40,18 @@ class QueueMonitor:
         self.previous_outbound_count = queue_size
         self.previous_check_time = current_time
 
-        # Check thresholds
-        if queue_size > self.size_threshold:
-            self.send_alert(f"Queue size exceeded threshold: {queue_size}")
-        if inbound_rate > self.inbound_rate_threshold:
-            self.send_alert(f"Inbound message rate exceeded threshold: {inbound_rate}")
-        if outbound_rate < self.outbound_rate_threshold:
-            self.send_alert(f"Outbound message rate undershot threshold: {outbound_rate}")
+        if self.run_count != 0:
+            # Check thresholds
+            if queue_size > self.size_threshold:
+                self.send_alert(f"Queue size exceeded threshold: {queue_size}")
+
+            if inbound_rate > self.inbound_rate_threshold:
+                self.send_alert(f"Inbound message rate exceeded threshold: {inbound_rate}")
+
+            if outbound_rate < self.outbound_rate_threshold:
+                self.send_alert(f"Outbound message rate undershot threshold: {outbound_rate}")
+
+        self.run_count += 1
 
     def send_alert(self, message):
         current_time = datetime.now()
